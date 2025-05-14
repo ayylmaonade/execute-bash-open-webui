@@ -14,11 +14,12 @@ import subprocess
 
 class Tools:
     class Valves(BaseModel):
-        pass
+        pass # Placeholder template for future configuration
 
     class UserValves(BaseModel):
-        pass
-
+        pass # Placeholder template for future configuration
+    
+    # Initialize Tools & assign it to user_valves
     def __init__(self):
         self.valves = self.Valves()
         self.user_valves = self.UserValves()
@@ -31,16 +32,16 @@ class Tools:
         """
         try:
             result = subprocess.run(
-                command,
-                shell=True,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
+                command,        # Runs the command specified
+                shell=True,     # Execute the command in bash shell
+                check=True,     # Calls processError incase cmd fails 
+                stdout=subprocess.PIPE, # Grab the std input
+                stderr=subprocess.PIPE, 
+                text=True, # returns output as text 
             )
             return result.stdout
-        except subprocess.CalledProcessError as e:
+        except subprocess.CalledProcessError as e:  # error handling
             return f"Error: {e.stderr}"
         except Exception as e:
-            return f"Unexpected error: {str(e)}"
+            return f"Unexpected error: {str(e)}"  # returns error message
 
