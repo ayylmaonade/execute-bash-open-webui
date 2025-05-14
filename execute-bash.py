@@ -1,11 +1,11 @@
 """
-Title: execute-bash
-Description: Allows the execution of _any_ and *all* bash commands and scripts. Use with caution! I strongly recommend you run open-webui in a container if you don't know what you're doing with bash - or even if you do.
-Author: Shaun (https://github.com/ayylmaonade)
-Repository: https://github.com/ayylmaonade/execute-bash-open-webui
-Date: 14/05/2025 (DD/MM/YY)
-Revision: 0.1
-License: GPLv3
+title: execute-bash
+description: Allows the execution of _any_ and *all* bash commands and scripts. Use with caution! I strongly recommend you run open-webui in a container if you don't know what you're doing with bash - or even if you do.
+author: Shaun (https://github.com/ayylmaonade)
+repository: https://github.com/ayylmaonade/execute-bash-open-webui
+date: 14/05/2025 (DD/MM/YY)
+version: 0.1
+license: GPLv3
 """
 
 from pydantic import BaseModel, Field
@@ -44,4 +44,5 @@ class Tools:
             return f"Error: {e.stderr}"
         except Exception as e:
             return f"Unexpected error: {str(e)}"  # returns error message
+
 
