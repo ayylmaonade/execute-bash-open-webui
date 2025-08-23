@@ -1,48 +1,55 @@
 """
-title: execute-bash
-description: Allows the execution of _any_ and *all* bash commands and scripts. Use with caution! I strongly recommend you run open-webui in a container if you don't know what you're doing with bash - or even if you do.
-author: Shaun (https://github.com/ayylmaonade)
-repository: https://github.com/ayylmaonade/execute-bash-open-webui
-date: 14/05/2025 (DD/MM/YY)
-version: 0.1
-license: GPLv3
+Title: execute-bash
+Description: Allows execution of bash commands with proper status tracking.
+Author: Shaun (https://github.com/ayylmaonade)
+Date: 14/05/2025
+Revision: 0.2
+License: GPLv3
 """
-
 from pydantic import BaseModel, Field
 import subprocess
 
-
 class Tools:
     class Valves(BaseModel):
-        pass # Placeholder template for future configuration
-
-    class UserValves(BaseModel):
-        pass # Placeholder template for future configuration
+        pass
     
-    # Initialize Tools & assign it to user_valves
+    class UserValves(BaseModel):
+        pass
+    
     def __init__(self):
         self.valves = self.Valves()
         self.user_valves = self.UserValves()
-
-    def execute_bash(self, command: str) -> str:
+    
+    async def execute_bash(self, command: str, __event_emitter__=None) -> str:
         """
-        Executes a bash command and returns its output.
-        :param command: The bash command to execute.
-        :return: Output of the command or an error message.
+        Executes bash command with status tracking.
+        Uses event emitter to show "Executing bash..." → "Executed bash."
         """
+        # Show initial status (done=False)
+        if __event_emitter__:
+            await __event_emitter__({
+                "type": "status",
+                "data": {"description": "Executing bash...", "done": False}
+            })
+        
         try:
             result = subprocess.run(
-                command,        # Runs the command specified
-                shell=True,     # Execute the command in bash shell
-                check=True,     # Calls processError incase cmd fails 
-                stdout=subprocess.PIPE, # Grab the std input
-                stderr=subprocess.PIPE, 
-                text=True, # returns output as text 
+                command,
+                shell=True,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
             )
             return result.stdout
-        except subprocess.CalledProcessError as e:  # error handling
+        except subprocess.CalledProcessError as e:
             return f"Error: {e.stderr}"
         except Exception as e:
-            return f"Unexpected error: {str(e)}"  # returns error message
-
-
+            return f"Unexpected error: {str(e)}"
+        finally:
+            # Show completion status (done=True)
+            if __event_emitter__:
+                await __event_emitter__({
+                    "type": "status",
+                    "data": {"description": "Executed bash.", "done": True}
+                })
