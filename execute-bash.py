@@ -3,7 +3,7 @@ Title: execute-bash
 Description: Allows execution of bash commands with proper status tracking.
 Author: Shaun (https://github.com/ayylmaonade)
 Date: 14/05/2025
-Revision: 0.2
+Revision: 0.3
 License: GPLv3
 """
 from pydantic import BaseModel, Field
